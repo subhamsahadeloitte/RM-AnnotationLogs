@@ -1,0 +1,19 @@
+# Ignore .env file containing sensitive information
+.env
+
+# Ignore node_modules
+node_modules
+
+# Ignore system and user-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore log files
+*.log
+
+# Ignore user-specific npm configuration files
+.npmrc
+
+# Ignore folders for scripts and collections
+Scripts/
+Collections/

@@ -1,0 +1,16 @@
+{
+  "name": "rm-annotation-logs",
+  "version": "1.0.0",
+  "description": "Tool for RM Annotation Logs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Subham Saha",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "mongoose": "^7.5.2"
+  }
+}
