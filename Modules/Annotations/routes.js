@@ -3,62 +3,44 @@ const router = express.Router();
 const annotationService = require("./services");
 
 // Filter annotations by a specific field and its value
-router.post("/filter", annotationService.filterAnnotations);
+// router.post("/filter", annotationService.filterAnnotations);
+router.post("/filter", async (req, res) => {
+  const { field, value } = req.body;
+  const result = await annotationService.filterAnnotations(field, value);
+  res.status(result.success ? 200 : 401).json(result);
+});
 
 // Create a new annotation
 router.post("/", async (req, res) => {
-  try {
-    const annotation = await annotationService.createAnnotation(req.body);
-    res.status(201).json(annotation);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
+  const result = await annotationService.createAnnotation(req.body);
+  res.status(result.success ? 200 : 401).json(result);
 });
 
 // Get all annotations
 router.get("/", async (req, res) => {
-  try {
-    const annotations = await annotationService.getAllAnnotations();
-    res.json(annotations);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  const result = await annotationService.getAllAnnotations();
+  res.status(result.success ? 200 : 401).json(result);
 });
 
 // Get a single annotation by ID
 router.get("/:id", async (req, res) => {
-  try {
-    const annotation = await annotationService.getAnnotationById(req.params.id);
-    if (!annotation) {
-      return res.status(404).json({ message: "Annotation not found" });
-    }
-    res.json(annotation);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  const result = await annotationService.getAnnotationById(req.params.id);
+  res.status(result.success ? 200 : 401).json(result);
 });
 
 // Update an annotation by ID
 router.patch("/:id", async (req, res) => {
-  try {
-    const annotation = await annotationService.updateAnnotation(
-      req.params.id,
-      req.body
-    );
-    res.json(annotation);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
+  const result = await annotationService.updateAnnotation(
+    req.params.id,
+    req.body
+  );
+  res.status(result.success ? 200 : 401).json(result);
 });
 
 // Delete an annotation by ID
 router.delete("/:id", async (req, res) => {
-  try {
-    await annotationService.deleteAnnotation(req.params.id);
-    res.json({ message: "Annotation deleted" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  const result = await annotationService.deleteAnnotation(req.params.id);
+  res.status(result.success ? 200 : 401).json(result);
 });
 
 module.exports = router;

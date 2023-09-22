@@ -25,10 +25,42 @@ async function login(email, password) {
     return { success: true, message: "Login successful" };
   } catch (error) {
     console.log({ error });
-    return { success: false, message: error.message };
+    return { success: false, message: "Internal Server Error", error };
+  }
+}
+
+// Function to get all employee records
+async function getAllEmployees() {
+  try {
+    const employees = await Employee.find();
+    if (employees) {
+      return { success: true, message: employees };
+    } else {
+      return { success: false, message: "Something went wrong" };
+    }
+  } catch (error) {
+    return { success: false, message: "Internal Server Error", error };
+  }
+}
+
+// Function to filter employee records by a field and its value
+async function filterEmployees(field, value) {
+  try {
+    const query = {};
+    query[field] = value;
+    const filteredEmployees = await Employee.find(query);
+    if (filteredEmployees) {
+      return { success: true, message: filteredEmployees };
+    } else {
+      return { success: false, message: "Something went wrong" };
+    }
+  } catch (error) {
+    return { success: false, message: "Internal Server Error", error };
   }
 }
 
 module.exports = {
   login,
+  getAllEmployees,
+  filterEmployees,
 };

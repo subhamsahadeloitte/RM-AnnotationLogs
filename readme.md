@@ -17,6 +17,21 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
     }
     ```
   - Comment: Needs more security. Will update later.
+- **Get all Employees** ^new^
+
+  - Method: GET
+  - Endpoint: `api/employee/`
+
+- **Filter Employees** ^new^
+  - Method: POST
+  - Endpoint: `api/employee/filter`
+  - Request Body:
+    ```json
+    {
+      "field": "email",
+      "value": "employee@email.com"
+    }
+    ```
 
 ### Annotations API
 
@@ -34,17 +49,17 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
       "rejected": false, // Whether the annotation is rejected (true/false)
       "language": "Java", // Language as a string
       "completions": [
-        "Completion 1",
-        "Completion 2",
-        "Completion 3",
-        "Completion 4"
+        "Completion 1 object",
+        "Completion 2 object",
+        "Completion 3 object",
+        "Completion 4 object"
       ], // Array of completion strings
       "taskType": "S1Review", // Task type (fresh, re-work, S1Review, S2Review)
       "ranking": "High", // Ranking as a string
       "reasoning": "This annotation is of high quality." // Reasoning for the annotation
     }
     ```
-  - Comment: Design your own _array_of_objects_ stucture to contain completions and their corresponding questions.
+  - Comment: Design your own **_array_of_objects_** stucture to contain completions and their corresponding questions.
 
 - **Update Annotation**
 
@@ -79,35 +94,47 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
     }
     ```
 
+### Response structure ^new^
+
+All endpoints, regardless of module, will produce the following response structure with appropriate values.
+
+```json
+{
+  "success": true, // or false
+  "message": ["Document 1","Document 2",...], // or String
+  "error": 'ERROR_OBJECT' // if any
+}
+```
+
 ## Getting Started
 
 To get started with the project, follow these steps:
 
 1. Clone this repository to your local machine:
 
-   ```
+```
    git clone <repository-url>
-   ```
+```
 
 2. Install project dependencies:
 
-   ```
+```
    npm install
-   ```
+```
 
 3. Install nodemon globally:
 
-   ```
+```
    npm install -g nodemon
-   ```
+```
 
 4. Set up your environment variables by creating a `.env` file and configuring the necessary values.
 5. Modify the `config.json` file to set up your project-specific configuration, including database URLs and server port.
 6. Start the server using nodemon:
 
-   ```
+```
    nodemon server.js
-   ```
+```
 
 Now, the server should be running, and you can access the APIs.
 
