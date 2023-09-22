@@ -17,12 +17,12 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
     }
     ```
   - Comment: Needs more security. Will update later.
-- **Get all Employees** ^new^
+- **Get all Employees**
 
   - Method: GET
   - Endpoint: `api/employee/`
 
-- **Filter Employees** ^new^
+- **Filter Employees**
   - Method: POST
   - Endpoint: `api/employee/filter`
   - Request Body:
@@ -94,7 +94,7 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
     }
     ```
 
-### Response structure ^new^
+### Response structure
 
 All endpoints, regardless of module, will produce the following response structure with appropriate values.
 
