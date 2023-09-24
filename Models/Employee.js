@@ -16,6 +16,14 @@ const employeeSchema = new mongoose.Schema({
     required: true,
     enum: ["primary", "secondary", "tertiary"],
   },
+  dateOfJoining: {
+    type: Date,
+    required: true,
+  },
+  designation: {
+    type: String,
+    required: true,
+  },
   passwordString: {
     type: String,
     required: true,

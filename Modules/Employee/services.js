@@ -32,7 +32,7 @@ async function login(email, password) {
 // Function to get all employee records
 async function getAllEmployees() {
   try {
-    const employees = await Employee.find();
+    const employees = await Employee.find().select({ passwordString: 0 });
     if (employees) {
       return { success: true, message: employees };
     } else {
@@ -48,7 +48,9 @@ async function filterEmployees(field, value) {
   try {
     const query = {};
     query[field] = value;
-    const filteredEmployees = await Employee.find(query);
+    const filteredEmployees = await Employee.find(query).select({
+      passwordString: 0,
+    });
     if (filteredEmployees) {
       return { success: true, message: filteredEmployees };
     } else {
