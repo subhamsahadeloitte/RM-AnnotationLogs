@@ -32,7 +32,11 @@ async function login(email, password) {
 // Function to get all employee records
 async function getAllEmployees() {
   try {
-    const employees = await Employee.find().select({ passwordString: 0 });
+    const employees = await Employee.find().select({
+      annotatorEmail: 1,
+      passwordString: 1,
+      _id: 0,
+    });
     if (employees) {
       return { success: true, message: employees };
     } else {

@@ -6,7 +6,11 @@ const annotationService = require("./services");
 // router.post("/filter", annotationService.filterAnnotations);
 router.post("/filter", async (req, res) => {
   const { field, value } = req.body;
-  const result = await annotationService.filterAnnotations(field, value);
+  const result = await annotationService.filterAnnotations(
+    field,
+    value,
+    req.query.page
+  );
   res.status(result.success ? 200 : 401).json(result);
 });
 
@@ -18,7 +22,7 @@ router.post("/", async (req, res) => {
 
 // Get all annotations
 router.get("/", async (req, res) => {
-  const result = await annotationService.getAllAnnotations();
+  const result = await annotationService.getAllAnnotations(req.query.page);
   res.status(result.success ? 200 : 401).json(result);
 });
 
