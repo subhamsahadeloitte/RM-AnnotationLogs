@@ -85,11 +85,11 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
 - **Get All Annotation**
 
   - Method: GET
-  - Endpoint: `api/annotations/?page=2`
+  - Endpoint: `api/annotations/?page=N`
 
 - **Filter Annotations**
   - Method: POST
-  - Endpoint: `api/annotations/filter`
+  - Endpoint: `api/annotations/filter/?page=N`
   - Request Body:
     ```json
     {

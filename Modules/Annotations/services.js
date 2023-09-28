@@ -17,7 +17,7 @@ async function createAnnotation(annotationData) {
           16,
           "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         );
-      console.log(annId);
+      // console.log(annId);
       annotationData["annotationId"] = annId;
     }
     const annotation = new Annotation(annotationData);
@@ -42,13 +42,17 @@ async function getAllAnnotations(page = 1) {
 
     const response = await Annotation.find().skip(skip).limit(limit);
 
+    const totalPages = Math.ceil(totalRecords / limit);
+
     if (response) {
       return {
         success: true,
-        message: {
-          annotations: response,
-          currentPage: page,
-          totalPages: Math.ceil(totalRecords / limit),
+        message: response,
+        pagination: {
+          page,
+          totalPages,
+          totalRecords,
+          nextPage: page < totalPages ? Number(page) + 1 : null,
         },
       };
     } else {
@@ -104,17 +108,35 @@ async function deleteAnnotation(id) {
 }
 
 // Filter annotations by a specific field and its value
-async function filterAnnotations(field, value) {
+async function filterAnnotations(field, value, page = 1) {
   try {
+    const limit = 2; // Number of records per page
+    const skip = (page - 1) * limit; // Calculate the number of records to skip
+
     const query = {};
-    query[field] = value;
-    const response = await Annotation.find(query);
+    let re = new RegExp(`${value}`, "i");
+    query[field] = re;
+
+    const totalRecords = await Annotation.countDocuments(query); // Get the total number of matching records
+
+    const response = await Annotation.find(query).skip(skip).limit(limit);
 
     if (response.length === 0) {
       return { success: true, message: "No matching annotations found." };
     }
 
-    return { success: true, message: response };
+    const totalPages = Math.ceil(totalRecords / limit);
+
+    return {
+      success: true,
+      message: response,
+      pagination: {
+        page,
+        totalPages,
+        totalRecords,
+        nextPage: page < totalPages ? Number(page) + 1 : null,
+      },
+    };
   } catch (error) {
     return { success: false, message: "Internal Server Error", error };
   }
