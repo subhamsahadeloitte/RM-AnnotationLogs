@@ -10,14 +10,16 @@ function randomString(length, chars) {
 // Create a new annotation
 async function createAnnotation(annotationData) {
   try {
-    const annId =
-      "ANN-" +
-      randomString(
-        16,
-        "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-      );
-    console.log(annId);
-    annotationData["annotationId"] = annId;
+    if (!annotationData["annotationId"]) {
+      const annId =
+        "ANN-" +
+        randomString(
+          16,
+          "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        );
+      console.log(annId);
+      annotationData["annotationId"] = annId;
+    }
     const annotation = new Annotation(annotationData);
     const response = await annotation.save();
     if (response) {
