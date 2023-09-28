@@ -63,25 +63,29 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
 
 - **Update Annotation**
 
-  - Method: PUT
+  - Method: PATCH
   - Endpoint: `api/annotations/:id`
   - Request Body:
     ```json
     {
-      "date": "2023-09-16",
-      "completions": ["Updated Completion 1", "Updated Completion 2"]
+      "field_name": "new_field_value"
     }
     ```
 
 - **Delete Annotation**
 
   - Method: DELETE
-  - Endpoint: `api/annotations/delete/:id`
+  - Endpoint: `api/annotations/:id`
 
 - **Get Annotation by ID**
 
   - Method: GET
-  - Endpoint: `api/annotations/get/:id`
+  - Endpoint: `api/annotations/:id`
+
+- **Get All Annotation**
+
+  - Method: GET
+  - Endpoint: `api/annotations/?page=2`
 
 - **Filter Annotations**
   - Method: POST
@@ -101,8 +105,8 @@ All endpoints, regardless of module, will produce the following response structu
 ```json
 {
   "success": true, // or false
-  "message": ["Document 1","Document 2",...], // or String
-  "error": 'ERROR_OBJECT' // if any
+  "message": data, // Array, Object, or String
+  "error": ERROR_OBJECT // if any
 }
 ```
 

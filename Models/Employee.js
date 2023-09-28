@@ -24,6 +24,10 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  language: {
+    type: String,
+    required: true,
+  },
   passwordString: {
     type: String,
     required: true,

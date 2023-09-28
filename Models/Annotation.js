@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const annotationSchema = new mongoose.Schema({
+  annotationId: {
+    type: String,
+    required: true,
+  },
   date: {
     type: Date,
     required: true,

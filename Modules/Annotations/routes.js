@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
 
 // Get all annotations
 router.get("/", async (req, res) => {
-  const result = await annotationService.getAllAnnotations();
+  const result = await annotationService.getAllAnnotations(req.query.page);
   res.status(result.success ? 200 : 401).json(result);
 });
 
