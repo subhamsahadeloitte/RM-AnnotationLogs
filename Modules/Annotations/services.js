@@ -35,7 +35,7 @@ async function createAnnotation(annotationData) {
 // Get all annotations with pagination
 async function getAllAnnotations(page = 1) {
   try {
-    const limit = 2; // Number of records per page
+    const limit = 20; // Number of records per page
     const skip = (page - 1) * limit; // Calculate the number of records to skip
 
     const totalRecords = await Annotation.countDocuments(); // Get the total number of records
