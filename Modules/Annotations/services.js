@@ -110,7 +110,7 @@ async function deleteAnnotation(id) {
 // Filter annotations by a specific field and its value
 async function filterAnnotations(field, value, page = 1) {
   try {
-    const limit = 2; // Number of records per page
+    const limit = 20; // Number of records per page
     const skip = (page - 1) * limit; // Calculate the number of records to skip
 
     const query = {};
