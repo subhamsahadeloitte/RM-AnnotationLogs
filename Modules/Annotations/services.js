@@ -35,12 +35,15 @@ async function createAnnotation(annotationData) {
 // Get all annotations with pagination
 async function getAllAnnotations(page = 1) {
   try {
-    const limit = 2; // Number of records per page
+    const limit = 20; // Number of records per page
     const skip = (page - 1) * limit; // Calculate the number of records to skip
 
     const totalRecords = await Annotation.countDocuments(); // Get the total number of records
 
-    const response = await Annotation.find().skip(skip).limit(limit);
+    const response = await Annotation.find()
+      .sort({ $natural: -1 })
+      .skip(skip)
+      .limit(limit);
 
     const totalPages = Math.ceil(totalRecords / limit);
 
@@ -110,7 +113,7 @@ async function deleteAnnotation(id) {
 // Filter annotations by a specific field and its value
 async function filterAnnotations(field, value, page = 1) {
   try {
-    const limit = 2; // Number of records per page
+    const limit = 20; // Number of records per page
     const skip = (page - 1) * limit; // Calculate the number of records to skip
 
     const query = {};
@@ -119,7 +122,10 @@ async function filterAnnotations(field, value, page = 1) {
 
     const totalRecords = await Annotation.countDocuments(query); // Get the total number of matching records
 
-    const response = await Annotation.find(query).skip(skip).limit(limit);
+    const response = await Annotation.find(query)
+      .sort({ $natural: -1 })
+      .skip(skip)
+      .limit(limit);
 
     if (response.length === 0) {
       return { success: true, message: "No matching annotations found." };
