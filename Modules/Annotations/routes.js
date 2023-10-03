@@ -3,13 +3,20 @@ const router = express.Router();
 const annotationService = require("./services");
 
 // Filter annotations by a specific field and its value
-// router.post("/filter", annotationService.filterAnnotations);
 router.post("/filter", async (req, res) => {
   const { field, value } = req.body;
   const result = await annotationService.filterAnnotations(
     field,
     value,
     req.query.page
+  );
+  res.status(result.success ? 200 : 401).json(result);
+});
+
+router.post("/filterByDate", async (req, res) => {
+  // const { fromDate, fromTime, toDate, toTime } = req.body;
+  const result = await annotationService.getAnnotationsByDateTimeRange(
+    req.body
   );
   res.status(result.success ? 200 : 401).json(result);
 });

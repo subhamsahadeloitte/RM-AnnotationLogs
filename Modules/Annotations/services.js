@@ -148,6 +148,61 @@ async function filterAnnotations(field, value, page = 1) {
   }
 }
 
+// Get annotations within a date and time range
+async function getAnnotationsByDateTimeRange(request) {
+  try {
+    const { fromDate, fromTime, toDate, toTime, groupBy } = request;
+
+    // Convert fromDate and toDate to Date objects
+    console.log(`${fromDate}T${fromTime}`, `${toDate}T${toTime}`);
+    const fromDateObj = new Date(`${fromDate}T${fromTime}`);
+    const toDateObj = new Date(`${toDate}T${toTime}`);
+
+    // Create a query to find records within the specified range
+    const query = {
+      date: {
+        $gte: fromDateObj, // Greater than or equal to fromDate
+        $lte: toDateObj, // Less than or equal to toDate
+      },
+    };
+
+    let totalRecords = null;
+    let response;
+    if (groupBy != "") {
+      const aggregationPipeline = [
+        {
+          $match: query,
+        },
+        {
+          $group: {
+            _id: `$${groupBy}`, // Group by
+            count: { $sum: 1 }, // Count the records in each group
+          },
+        },
+        {
+          $sort: {
+            count: -1, // Sort in decreasing order of counts
+          },
+        },
+      ];
+
+      response = await Annotation.aggregate(aggregationPipeline);
+    } else {
+      totalRecords = await Annotation.countDocuments(query);
+      response = await Annotation.find(query);
+    }
+
+    if (response) {
+      return { success: true, message: response, pagination: { totalRecords } };
+    } else {
+      return { success: false, message: "No matching annotations found." };
+    }
+  } catch (error) {
+    return { success: false, message: "Internal Server Error", error };
+    console.log(error);
+  }
+}
+
 module.exports = {
   createAnnotation,
   getAllAnnotations,
@@ -155,4 +210,5 @@ module.exports = {
   updateAnnotation,
   deleteAnnotation,
   filterAnnotations,
+  getAnnotationsByDateTimeRange,
 };
