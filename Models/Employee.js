@@ -28,6 +28,10 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  podNumber: {
+    type: String,
+    required: true,
+  },
   passwordString: {
     type: String,
     required: true,

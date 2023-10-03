@@ -97,6 +97,20 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
       "value": "fresh"
     }
     ```
+- **Filter Annotations By Date**
+  - Method: POST
+  - Endpoint: `api/annotations/filterByDate/`
+  - Request Body:
+    ```json
+    {
+      "fromDate": "2023-09-28",
+      "fromTime": "00:00:00",
+      "toDate": "2023-09-28",
+      "toTime": "24:00:00",
+      "groupBy": "annotatorEmail" // or language, etc
+    }
+    ```
+  - Comment: Keeping the `groupBy` field empty will return all annotations for that date range
 
 ### Response structure
 
@@ -105,8 +119,9 @@ All endpoints, regardless of module, will produce the following response structu
 ```json
 {
   "success": true, // or false
-  "message": data, // Array, Object, or String
-  "error": ERROR_OBJECT // if any
+  "message": "<data>", // Array, Object, or String
+  "pagination": "<pagination_object>", // if any
+  "error": "<ERROR_OBJECT>" // if any
 }
 ```
 
