@@ -97,7 +97,7 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
       "value": "fresh"
     }
     ```
-- **Filter Annotations By Date**
+- #### **Filter Annotations By Date**
   - Method: POST
   - Endpoint: `api/annotations/filterByDate/`
   - Request Body:

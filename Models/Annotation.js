@@ -45,6 +45,13 @@ const annotationSchema = new mongoose.Schema({
   reasoning: {
     type: String,
   },
+  reasonForRejection: {
+    type: String,
+  },
+  rejectionConfirmedByReviewer: {
+    type: Boolean,
+    default: false, // Default value is false
+  },
 });
 
 const Annotation = mongoose.model("Annotation", annotationSchema);
