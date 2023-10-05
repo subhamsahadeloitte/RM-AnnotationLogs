@@ -115,11 +115,12 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
 
 - #### **Filter Annotations By POD Number**
   - Method: POST
-  - Endpoint: `api/annotations/filterByPod/`
+  - Endpoint: `api/annotations/filterByPod/?page=N`
   - Request Body:
     ```json
     {
-      "podNumber": "2"
+      "podNumber": "2",
+      "language": "Python"
     }
     ```
 
