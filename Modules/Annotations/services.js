@@ -203,10 +203,11 @@ async function getAnnotationsByDateTimeRange(request) {
   }
 }
 
-// Filter annotations by podNumber
-async function filterAnnotationsByPodNumber(podNumber) {
+// Filter annotations by podNumber with pagination and count info
+async function filterAnnotationsByPodNumber(podNumber, language, page = 1) {
   try {
     // Create an aggregation pipeline to join Annotations with Employees
+    const limit = 20; // Number of records per page
     const aggregationPipeline = [
       {
         $lookup: {
@@ -219,14 +220,47 @@ async function filterAnnotationsByPodNumber(podNumber) {
       {
         $match: {
           "employee.podNumber": podNumber,
+          language,
         },
+      },
+      {
+        $sort: { createdAt: -1 }, // Sort by createdAt field in descending order (latest first)
       },
     ];
 
+    const totalCount = await Annotation.aggregate([
+      ...aggregationPipeline,
+      {
+        $count: "count",
+      },
+    ]);
+
+    const totalRecords = totalCount.length > 0 ? totalCount[0].count : 0;
+
+    const totalPages = Math.ceil(totalRecords / limit);
+
+    const skip = (page - 1) * limit;
+
+    aggregationPipeline.push(
+      {
+        $skip: skip, // Calculate the number of documents to skip
+      },
+      {
+        $limit: limit, // Limit the number of documents per page
+      }
+    );
+
     const response = await Annotation.aggregate(aggregationPipeline);
 
+    const paginationInfo = {
+      page,
+      totalPages,
+      totalRecords,
+      nextPage: page < totalPages ? Number(page) + 1 : null,
+    };
+
     if (response) {
-      return { success: true, message: response };
+      return { success: true, message: response, pagination: paginationInfo };
     } else {
       return { success: false, message: "No matching annotations found." };
     }

@@ -22,7 +22,9 @@ router.post("/filterByDate", async (req, res) => {
 
 router.post("/filterByPod", async (req, res) => {
   const result = await annotationService.filterAnnotationsByPodNumber(
-    req.body.podNumber
+    req.body.podNumber,
+    req.body.language,
+    req.query.page
   );
   res.status(result.success ? 200 : 401).json(result);
 });
