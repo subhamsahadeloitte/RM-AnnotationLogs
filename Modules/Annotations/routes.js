@@ -14,9 +14,15 @@ router.post("/filter", async (req, res) => {
 });
 
 router.post("/filterByDate", async (req, res) => {
-  // const { fromDate, fromTime, toDate, toTime } = req.body;
   const result = await annotationService.getAnnotationsByDateTimeRange(
     req.body
+  );
+  res.status(result.success ? 200 : 401).json(result);
+});
+
+router.post("/filterByPod", async (req, res) => {
+  const result = await annotationService.filterAnnotationsByPodNumber(
+    req.body.podNumber
   );
   res.status(result.success ? 200 : 401).json(result);
 });

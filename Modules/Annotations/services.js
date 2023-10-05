@@ -203,6 +203,38 @@ async function getAnnotationsByDateTimeRange(request) {
   }
 }
 
+// Filter annotations by podNumber
+async function filterAnnotationsByPodNumber(podNumber) {
+  try {
+    // Create an aggregation pipeline to join Annotations with Employees
+    const aggregationPipeline = [
+      {
+        $lookup: {
+          from: "employees", // Name of the Employees collection
+          localField: "annotatorEmail",
+          foreignField: "annotatorEmail",
+          as: "employee",
+        },
+      },
+      {
+        $match: {
+          "employee.podNumber": podNumber,
+        },
+      },
+    ];
+
+    const response = await Annotation.aggregate(aggregationPipeline);
+
+    if (response) {
+      return { success: true, message: response };
+    } else {
+      return { success: false, message: "No matching annotations found." };
+    }
+  } catch (error) {
+    return { success: false, message: "Internal Server Error", error };
+  }
+}
+
 module.exports = {
   createAnnotation,
   getAllAnnotations,
@@ -211,4 +243,5 @@ module.exports = {
   deleteAnnotation,
   filterAnnotations,
   getAnnotationsByDateTimeRange,
+  filterAnnotationsByPodNumber,
 };

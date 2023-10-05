@@ -98,6 +98,7 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
     }
     ```
 - #### **Filter Annotations By Date**
+
   - Method: POST
   - Endpoint: `api/annotations/filterByDate/`
   - Request Body:
@@ -111,6 +112,16 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
     }
     ```
   - Comment: Keeping the `groupBy` field empty will return all annotations for that date range
+
+- #### **Filter Annotations By POD Number**
+  - Method: POST
+  - Endpoint: `api/annotations/filterByPod/`
+  - Request Body:
+    ```json
+    {
+      "podNumber": "2"
+    }
+    ```
 
 ### Response structure
 
