@@ -18,11 +18,11 @@ const employeeSchema = new mongoose.Schema({
   },
   dateOfJoining: {
     type: Date,
-    required: true,
+    // required: true,
   },
   designation: {
     type: String,
-    required: true,
+    // required: true,
   },
   language: {
     type: String,
