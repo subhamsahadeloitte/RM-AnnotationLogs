@@ -204,8 +204,22 @@ async function getAnnotationsByDateTimeRange(request) {
 }
 
 // Filter annotations by podNumber with pagination and count info
-async function filterAnnotationsByPodNumber(podNumber, language, page = 1) {
+async function filterAnnotationsByPodNumber(req) {
   try {
+    const podNumber = req.body.podNumber;
+    const language = req.body.language;
+    const search = req.body.search;
+    const page = req.query.page || 1;
+
+    let match = {
+      "employee.podNumber": podNumber,
+      language,
+    };
+    if (search != null) {
+      let re = new RegExp(`${search.value}`, "i");
+      match[search.field] = re;
+    }
+
     // Create an aggregation pipeline to join Annotations with Employees
     const limit = 20; // Number of records per page
     const aggregationPipeline = [
@@ -218,13 +232,10 @@ async function filterAnnotationsByPodNumber(podNumber, language, page = 1) {
         },
       },
       {
-        $match: {
-          "employee.podNumber": podNumber,
-          language,
-        },
+        $match: match,
       },
       {
-        $sort: { createdAt: -1 }, // Sort by createdAt field in descending order (latest first)
+        $sort: { date: -1 }, // Sort by createdAt field in descending order (latest first)
       },
     ];
 
@@ -236,9 +247,7 @@ async function filterAnnotationsByPodNumber(podNumber, language, page = 1) {
     ]);
 
     const totalRecords = totalCount.length > 0 ? totalCount[0].count : 0;
-
     const totalPages = Math.ceil(totalRecords / limit);
-
     const skip = (page - 1) * limit;
 
     aggregationPipeline.push(
