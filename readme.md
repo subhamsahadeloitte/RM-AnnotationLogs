@@ -114,6 +114,7 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
   - Comment: Keeping the `groupBy` field empty will return all annotations for that date range.
 
 - #### **Filter Annotations By POD Number**
+
   - Method: POST
   - Endpoint: `api/annotations/filterByPod/?page=N`
   - Request Body:
@@ -128,6 +129,18 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
     }
     ```
   - Comment: Set the `search` field value to null to filter only by pod and language.
+
+- #### **Group Annotations By POD Number**
+  - Method: POST
+  - Endpoint: `api/annotations/groupByPod/`
+  - Request Body:
+    ```json
+    {
+      "podNumber": "2",
+      "language": "Python"
+    }
+    ```
+  - Comment: Leave all fields empty to group by _podNumber_. Leave the `language` field empty to group by _language_ for given `podNumber`. Fill both fields to group by _annotatorEmail_ for given `podNumber` and `language`.
 
 ### Response structure
 

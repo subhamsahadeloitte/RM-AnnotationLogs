@@ -25,6 +25,11 @@ router.post("/filterByPod", async (req, res) => {
   res.status(result.success ? 200 : 401).json(result);
 });
 
+router.post("/groupByPod", async (req, res) => {
+  const result = await annotationService.groupAnnotationsByPodNumber(req);
+  res.status(result.success ? 200 : 401).json(result);
+});
+
 // Create a new annotation
 router.post("/", async (req, res) => {
   const result = await annotationService.createAnnotation(req.body);

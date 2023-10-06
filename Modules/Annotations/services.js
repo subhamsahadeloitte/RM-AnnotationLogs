@@ -278,6 +278,54 @@ async function filterAnnotationsByPodNumber(req) {
   }
 }
 
+// Filter annotations by podNumber and group by language field
+async function groupAnnotationsByPodNumber(req) {
+  try {
+    // Create an aggregation pipeline to join Annotations with Employees and group by language
+    let groupBy = "$employee.podNumber";
+    let match = {};
+    if (req.body.podNumber != "") {
+      match["employee.podNumber"] = req.body.podNumber;
+      groupBy = "$language";
+    }
+    if (req.body.language != "") {
+      match["language"] = req.body.language;
+      // match["taskType"] = "fresh";
+      groupBy = "$annotatorEmail";
+    }
+
+    const aggregationPipeline = [
+      {
+        $lookup: {
+          from: "employees", // Name of the Employees collection
+          localField: "annotatorEmail",
+          foreignField: "annotatorEmail",
+          as: "employee",
+        },
+      },
+      {
+        $match: match,
+      },
+      {
+        $group: {
+          _id: groupBy, // Group by the 'language' field
+          count: { $sum: 1 }, // Calculate the count of each language
+        },
+      },
+    ];
+
+    const response = await Annotation.aggregate(aggregationPipeline);
+
+    if (response) {
+      return { success: true, message: response };
+    } else {
+      return { success: false, message: "No matching annotations found." };
+    }
+  } catch (error) {
+    return { success: false, message: "Internal Server Error", error };
+  }
+}
+
 module.exports = {
   createAnnotation,
   getAllAnnotations,
@@ -287,4 +335,5 @@ module.exports = {
   filterAnnotations,
   getAnnotationsByDateTimeRange,
   filterAnnotationsByPodNumber,
+  groupAnnotationsByPodNumber,
 };
