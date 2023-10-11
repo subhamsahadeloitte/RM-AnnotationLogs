@@ -283,7 +283,22 @@ async function groupAnnotationsByPodNumber(req) {
   try {
     // Create an aggregation pipeline to join Annotations with Employees and group by language
     let groupBy = "$employee.podNumber";
-    let match = {};
+    // let match = {};
+
+    const { fromDate, fromTime, toDate, toTime } = req.body;
+    // Convert fromDate and toDate to Date objects
+    console.log(`${fromDate}T${fromTime}`, `${toDate}T${toTime}`);
+    const fromDateObj = new Date(`${fromDate}T${fromTime}`);
+    const toDateObj = new Date(`${toDate}T${toTime}`);
+
+    // Create a query to find records within the specified range
+    const match = {
+      date: {
+        $gte: fromDateObj, // Greater than or equal to fromDate
+        $lte: toDateObj, // Less than or equal to toDate
+      },
+    };
+
     if (req.body.podNumber != "") {
       match["employee.podNumber"] = req.body.podNumber;
       groupBy = "$language";
