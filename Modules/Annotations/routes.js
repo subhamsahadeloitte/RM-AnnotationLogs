@@ -14,9 +14,7 @@ router.post("/filter", async (req, res) => {
 });
 
 router.post("/filterByDate", async (req, res) => {
-  const result = await annotationService.getAnnotationsByDateTimeRange(
-    req.body
-  );
+  const result = await annotationService.getAnnotationsByDateTimeRange(req);
   res.status(result.success ? 200 : 401).json(result);
 });
 
