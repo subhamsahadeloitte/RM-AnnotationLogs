@@ -108,10 +108,14 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
       "fromTime": "00:00:00",
       "toDate": "2023-09-28",
       "toTime": "24:00:00",
-      "groupBy": "annotatorEmail" // or language, etc
+      "groupBy": "annotatorEmail", // or language, etc
+      "search": {
+        "field": "annotatorEmail",
+        "value": "amanimuthu@deloitte.com"
+      }
     }
     ```
-  - Comment: Keeping the `groupBy` field empty will return all annotations for that date range.
+  - Comment: Keeping the `groupBy` field empty will return all annotations for that date range. Set the `search` field value to null to fetch all annotations.
 
 - #### **Filter Annotations By POD Number**
 

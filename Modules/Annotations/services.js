@@ -151,7 +151,8 @@ async function filterAnnotations(field, value, page = 1) {
 // Get annotations within a date and time range
 async function getAnnotationsByDateTimeRange(request) {
   try {
-    const { fromDate, fromTime, toDate, toTime, groupBy } = request;
+    const { fromDate, fromTime, toDate, toTime, groupBy, search } =
+      request.body;
 
     // Convert fromDate and toDate to Date objects
     console.log(`${fromDate}T${fromTime}`, `${toDate}T${toTime}`);
@@ -165,6 +166,10 @@ async function getAnnotationsByDateTimeRange(request) {
         $lte: toDateObj, // Less than or equal to toDate
       },
     };
+    if (search != null) {
+      let re = new RegExp(`${search.value}`, "i");
+      query[search.field] = re;
+    }
 
     let totalRecords = null;
     let response;
