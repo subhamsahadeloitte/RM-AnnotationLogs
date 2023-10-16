@@ -288,7 +288,6 @@ async function groupAnnotationsByPodNumber(req) {
   try {
     // Create an aggregation pipeline to join Annotations with Employees and group by language
     let groupBy = "$employee.podNumber";
-    // let match = {};
 
     const { fromDate, fromTime, toDate, toTime } = req.body;
     // Convert fromDate and toDate to Date objects
@@ -330,6 +329,12 @@ async function groupAnnotationsByPodNumber(req) {
         $group: {
           _id: groupBy, // Group by the 'language' field
           count: { $sum: 1 }, // Calculate the count of each language
+          rejectedCount: {
+            $sum: { $cond: [{ $eq: ["$rejected", true] }, 1, 0] },
+          },
+          approvedCount: {
+            $sum: { $cond: [{ $eq: ["$rejected", false] }, 1, 0] },
+          },
         },
       },
     ];
