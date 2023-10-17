@@ -115,10 +115,15 @@ async function filterAnnotations(field, value, page = 1) {
   try {
     const limit = 20; // Number of records per page
     const skip = (page - 1) * limit; // Calculate the number of records to skip
+    // console.log({ value });
 
     const query = {};
-    let re = new RegExp(`${value}`, "i");
-    query[field] = re;
+    if (field === "prompt") {
+      query[field] = value;
+    } else {
+      let re = new RegExp(`${value}`, "i");
+      query[field] = re;
+    }
 
     const totalRecords = await Annotation.countDocuments(query); // Get the total number of matching records
 
