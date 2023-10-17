@@ -45,6 +45,11 @@ const annotationSchema = new mongoose.Schema({
   reasoning: {
     type: String,
   },
+  confidenceRating: {
+    type: String,
+    enum: ["Yes", "No", "Maybe"],
+    default: "Maybe",
+  },
   reasonForRejection: {
     type: String,
   },
