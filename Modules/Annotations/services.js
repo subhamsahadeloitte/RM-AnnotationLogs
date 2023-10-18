@@ -172,8 +172,13 @@ async function getAnnotationsByDateTimeRange(request) {
       },
     };
     if (search != null) {
-      let re = new RegExp(`${search.value}`, "i");
-      query[search.field] = re;
+      const { field, value } = search;
+      if (field === "prompt") {
+        query[field] = value;
+      } else {
+        let re = new RegExp(`${value}`, "i");
+        query[field] = re;
+      }
     }
 
     let totalRecords = null;
@@ -226,8 +231,13 @@ async function filterAnnotationsByPodNumber(req) {
       language,
     };
     if (search != null) {
-      let re = new RegExp(`${search.value}`, "i");
-      match[search.field] = re;
+      const { field, value } = search;
+      if (field === "prompt") {
+        match[field] = value;
+      } else {
+        let re = new RegExp(`${value}`, "i");
+        match[field] = re;
+      }
     }
 
     // Create an aggregation pipeline to join Annotations with Employees
@@ -284,6 +294,7 @@ async function filterAnnotationsByPodNumber(req) {
       return { success: false, message: "No matching annotations found." };
     }
   } catch (error) {
+    console.log(error);
     return { success: false, message: "Internal Server Error", error };
   }
 }
