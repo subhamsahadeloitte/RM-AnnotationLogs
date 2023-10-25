@@ -163,7 +163,7 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
       "language": "Python"
     }
     ```
-  - Comment: Leave all fields empty to group by _batchNumber_. Leave the `language` field empty to group by _language_ for given `batchNumber`. Fill both fields to group by _annotatorEmail_ for given `batchNumber` and `language`.
+  - Comment: Leave all fields empty to group by _batchNumber_. Leave the `language` field empty to group by _language_ for given `batchNumber`. Fill both fields to group by _annotationId_ for given `batchNumber` and `language`.
 
 ### Response structure
 

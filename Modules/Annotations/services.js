@@ -391,7 +391,7 @@ async function groupAnnotationsByBatch(req) {
     }
     if (req.body.language != "") {
       match["language"] = req.body.language;
-      groupBy = "$annotatorEmail";
+      groupBy = "$annotationId";
     }
 
     const aggregationPipeline = [
