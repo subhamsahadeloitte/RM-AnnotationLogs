@@ -367,6 +367,63 @@ async function groupAnnotationsByPodNumber(req) {
   }
 }
 
+async function groupAnnotationsByBatch(req) {
+  try {
+    let groupBy = "$batchNumber";
+
+    const { fromDate, fromTime, toDate, toTime } = req.body;
+    // Convert fromDate and toDate to Date objects
+    console.log(`${fromDate}T${fromTime}`, `${toDate}T${toTime}`);
+    const fromDateObj = new Date(`${fromDate}T${fromTime}`);
+    const toDateObj = new Date(`${toDate}T${toTime}`);
+
+    // Create a query to find records within the specified range
+    const match = {
+      date: {
+        $gte: fromDateObj, // Greater than or equal to fromDate
+        $lte: toDateObj, // Less than or equal to toDate
+      },
+    };
+
+    if (req.body.batchNumber != "") {
+      match["batchNumber"] = req.body.batchNumber;
+      groupBy = "$language";
+    }
+    if (req.body.language != "") {
+      match["language"] = req.body.language;
+      groupBy = "$annotationId";
+    }
+
+    const aggregationPipeline = [
+      {
+        $match: match,
+      },
+      {
+        $group: {
+          _id: groupBy, // Group by the 'language' field
+          count: { $sum: 1 }, // Calculate the count of each language
+          rejectedCount: {
+            $sum: { $cond: [{ $eq: ["$rejected", true] }, 1, 0] },
+          },
+          approvedCount: {
+            $sum: { $cond: [{ $eq: ["$rejected", false] }, 1, 0] },
+          },
+        },
+      },
+    ];
+
+    const response = await Annotation.aggregate(aggregationPipeline);
+
+    if (response) {
+      return { success: true, message: response };
+    } else {
+      return { success: false, message: "No matching annotations found." };
+    }
+  } catch (error) {
+    return { success: false, message: "Internal Server Error", error };
+  }
+}
+
 module.exports = {
   createAnnotation,
   getAllAnnotations,
@@ -377,4 +434,5 @@ module.exports = {
   getAnnotationsByDateTimeRange,
   filterAnnotationsByPodNumber,
   groupAnnotationsByPodNumber,
+  groupAnnotationsByBatch,
 };
