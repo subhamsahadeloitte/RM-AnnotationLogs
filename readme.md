@@ -149,6 +149,21 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
     }
     ```
   - Comment: Leave all fields empty to group by _podNumber_. Leave the `language` field empty to group by _language_ for given `podNumber`. Fill both fields to group by _annotatorEmail_ for given `podNumber` and `language`.
+- #### **Group Annotations By Batch Number**
+  - Method: POST
+  - Endpoint: `api/annotations/groupByBatch/`
+  - Request Body:
+    ```json
+    {
+      "fromDate": "2023-10-20",
+      "fromTime": "00:00:00",
+      "toDate": "2023-10-25",
+      "toTime": "00:00:00",
+      "batchNumber": "Batch 5",
+      "language": "Python"
+    }
+    ```
+  - Comment: Leave all fields empty to group by _batchNumber_. Leave the `language` field empty to group by _language_ for given `batchNumber`. Fill both fields to group by _annotatorEmail_ for given `batchNumber` and `language`.
 
 ### Response structure
 
