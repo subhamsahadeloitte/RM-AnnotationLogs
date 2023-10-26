@@ -155,10 +155,6 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
   - Request Body:
     ```json
     {
-      "fromDate": "2023-10-20",
-      "fromTime": "00:00:00",
-      "toDate": "2023-10-25",
-      "toTime": "00:00:00",
       "batchNumber": "Batch 5",
       "language": "Python"
     }

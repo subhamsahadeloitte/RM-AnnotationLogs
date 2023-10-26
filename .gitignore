@@ -17,3 +17,4 @@ Thumbs.db
 # Ignore folders for scripts and collections
 Scripts/
 Collections/
+Aggregations/

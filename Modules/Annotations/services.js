@@ -371,19 +371,19 @@ async function groupAnnotationsByBatch(req) {
   try {
     let groupBy = "$batchNumber";
 
-    const { fromDate, fromTime, toDate, toTime } = req.body;
-    // Convert fromDate and toDate to Date objects
-    console.log(`${fromDate}T${fromTime}`, `${toDate}T${toTime}`);
-    const fromDateObj = new Date(`${fromDate}T${fromTime}`);
-    const toDateObj = new Date(`${toDate}T${toTime}`);
+    // const { fromDate, fromTime, toDate, toTime } = req.body;
+    // console.log(`${fromDate}T${fromTime}`, `${toDate}T${toTime}`);
+    // const fromDateObj = new Date(`${fromDate}T${fromTime}`);
+    // const toDateObj = new Date(`${toDate}T${toTime}`);
 
     // Create a query to find records within the specified range
-    const match = {
-      date: {
-        $gte: fromDateObj, // Greater than or equal to fromDate
-        $lte: toDateObj, // Less than or equal to toDate
-      },
-    };
+    const match = {};
+    // const match = {
+    //   date: {
+    //     $gte: fromDateObj, // Greater than or equal to fromDate
+    //     $lte: toDateObj, // Less than or equal to toDate
+    //   },
+    // };
 
     if (req.body.batchNumber != "") {
       match["batchNumber"] = req.body.batchNumber;
