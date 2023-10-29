@@ -7,7 +7,8 @@ const annotationSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    required: true,
+    // required: true,
+    default: new Date(),
   },
   annotatorEmail: {
     type: String,
@@ -17,7 +18,7 @@ const annotationSchema = new mongoose.Schema({
   },
   batchNumber: {
     type: String,
-    required: true,
+    // required: true,
   },
   prompt: {
     type: String,
@@ -29,7 +30,7 @@ const annotationSchema = new mongoose.Schema({
   },
   language: {
     type: String,
-    required: true,
+    // required: true,
   },
   completions: {
     type: Array, // Assuming completions are stored as an array of strings
@@ -37,7 +38,7 @@ const annotationSchema = new mongoose.Schema({
   taskType: {
     type: String,
     enum: ["fresh", "re-work", "S1Review", "S2Review"],
-    required: true,
+    // required: true,
   },
   ranking: {
     type: String,

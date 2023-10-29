@@ -1,0 +1,76 @@
+{
+  "annotatorEmail": "",
+  "language": "",
+  "batchNumber": "",
+  "prompt": "",
+  "taskType": "fresh",
+  "completions": [
+    {
+      "completionText": "",
+      "completionQuestions": {
+        "Q1": "",
+        "Q2": "",
+        "Q3": "",
+        "Q4": "",
+        "Q5": "",
+        "Q6": "",
+        "Q7": ""
+      },
+      "completionReasoning": {
+        "reasonForQ1A": "",
+        "reasonForQ2A": "",
+        "reasonForQ6A": ""
+      },
+      "completionReasoningURLs": {
+        "urlForQ1A": "",
+        "urlForQ2A": ""
+      }
+    },
+    {
+      "completionText": "",
+      "completionQuestions": {
+        "Q1": "",
+        "Q2": "",
+        "Q3": "",
+        "Q4": "",
+        "Q5": "",
+        "Q6": "",
+        "Q7": ""
+      },
+      "completionReasoning": {
+        "reasonForQ1B": "",
+        "reasonForQ2B": "",
+        "reasonForQ6B": ""
+      },
+      "completionReasoningURLs": {
+        "urlForQ1B": "",
+        "urlForQ2B": ""
+      }
+    },
+    {
+      "completionText": "",
+      "completionQuestions": {
+        "Q1": "",
+        "Q2": "",
+        "Q3": "",
+        "Q4": "",
+        "Q5": "",
+        "Q6": "",
+        "Q7": ""
+      },
+      "completionReasoning": {
+        "reasonForQ1C": "",
+        "reasonForQ2C": "",
+        "reasonForQ6C": ""
+      },
+      "completionReasoningURLs": {
+        "urlForQ1C": "",
+        "urlForQ2C": ""
+      }
+    }
+  ],
+  "ranking": "",
+  "reasoning": "",
+  "rejected": false,
+  "confidenceRating": "No"
+}
