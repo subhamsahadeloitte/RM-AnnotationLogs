@@ -33,6 +33,12 @@ router.post("/groupByBatch", async (req, res) => {
   res.status(result.success ? 200 : 401).json(result);
 });
 
+// Log a new annotation with fewer data
+router.post("/logAnnotation", async (req, res) => {
+  const result = await annotationService.logAnnotation(req);
+  res.status(result.success ? 200 : 401).json(result);
+});
+
 // Create a new annotation
 router.post("/", async (req, res) => {
   const result = await annotationService.createAnnotation(req.body);

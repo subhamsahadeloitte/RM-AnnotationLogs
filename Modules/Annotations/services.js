@@ -10,6 +10,7 @@ function randomString(length, chars) {
 // Create a new annotation
 async function createAnnotation(annotationData) {
   try {
+    console.log({ annotationData });
     if (!annotationData["annotationId"]) {
       const annId =
         "ANN-" +
@@ -28,6 +29,55 @@ async function createAnnotation(annotationData) {
       return { success: false, message: "Something went wrong" };
     }
   } catch (error) {
+    return { success: false, message: "Internal Server Error", error };
+  }
+}
+
+async function logAnnotation(req) {
+  try {
+    const { prompt, compA, compB, compC, annotatorEmail, role } = req.body;
+    // console.log({ prompt, compA, compB, compC, annotatorEmail, role });
+
+    // Check if a document with the specified 'prompt' and 'completionTexts' exists
+    const existingCompletion = await Annotation.find({
+      prompt,
+      completions: {
+        $elemMatch: {
+          completionText: { $in: [compA, compB, compC] },
+        },
+      },
+    });
+    // console.log({ existingCompletion });
+    if (existingCompletion.length != 0) {
+      return { success: true, message: existingCompletion, logged: false };
+    } else {
+      const annId =
+        "ANN-" +
+        randomString(
+          16,
+          "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        );
+
+      const annotationData = require("../../Resources/annotation-structure.json");
+
+      annotationData.annotationId = annId;
+      annotationData.annotatorEmail = annotatorEmail;
+      annotationData.prompt = prompt;
+      annotationData.completions[0].completionText = compA;
+      annotationData.completions[1].completionText = compB;
+      annotationData.completions[2].completionText = compC;
+      console.log({ annotationData });
+
+      const annotation = new Annotation(annotationData);
+      const response = await annotation.save();
+      if (response) {
+        return { success: true, message: response, logged: true };
+      } else {
+        return { success: false, message: "Something went wrong" };
+      }
+    }
+  } catch (error) {
+    console.log(error);
     return { success: false, message: "Internal Server Error", error };
   }
 }
@@ -160,7 +210,7 @@ async function getAnnotationsByDateTimeRange(request) {
       request.body;
 
     // Convert fromDate and toDate to Date objects
-    console.log(`${fromDate}T${fromTime}`, `${toDate}T${toTime}`);
+    // console.log(`${fromDate}T${fromTime}`, `${toDate}T${toTime}`);
     const fromDateObj = new Date(`${fromDate}T${fromTime}`);
     const toDateObj = new Date(`${toDate}T${toTime}`);
 
@@ -307,7 +357,7 @@ async function groupAnnotationsByPodNumber(req) {
 
     const { fromDate, fromTime, toDate, toTime } = req.body;
     // Convert fromDate and toDate to Date objects
-    console.log(`${fromDate}T${fromTime}`, `${toDate}T${toTime}`);
+    // console.log(`${fromDate}T${fromTime}`, `${toDate}T${toTime}`);
     const fromDateObj = new Date(`${fromDate}T${fromTime}`);
     const toDateObj = new Date(`${toDate}T${toTime}`);
 
@@ -415,7 +465,7 @@ async function groupAnnotationsByBatch(req) {
     const response = await Annotation.aggregate(aggregationPipeline);
 
     if (response) {
-      return { success: true, message: response };
+      return { success: true, message: response, totalCount: response.length };
     } else {
       return { success: false, message: "No matching annotations found." };
     }
@@ -426,6 +476,7 @@ async function groupAnnotationsByBatch(req) {
 
 module.exports = {
   createAnnotation,
+  logAnnotation,
   getAllAnnotations,
   getAnnotationById,
   updateAnnotation,
