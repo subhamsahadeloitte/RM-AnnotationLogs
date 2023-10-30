@@ -1,4 +1,5 @@
 const Annotation = require("../../Models/Annotation");
+const stringSimilarity = require("string-similarity");
 
 function randomString(length, chars) {
   var result = "";
@@ -476,6 +477,62 @@ async function groupAnnotationsByBatch(req) {
   }
 }
 
+function calculateSimilarity(completions1, completions2) {
+  // Extract completion texts for Q3, Q4, Q5 from both sets
+  let score = 0,
+    total = 9;
+  completions1.map((item, idx) => {
+    if (
+      item.completionQuestions.Q3 === completions2[idx].completionQuestions.Q3
+    )
+      score++;
+    if (
+      item.completionQuestions.Q4 === completions2[idx].completionQuestions.Q4
+    )
+      score++;
+    if (
+      item.completionQuestions.Q5 === completions2[idx].completionQuestions.Q5
+    )
+      score++;
+  });
+
+  // Calculate similarity using the string-similarity library
+  const similarity = score / total;
+  return (similarity * 100).toFixed(2); // Convert to percentage
+}
+
+async function validateWithSecondary(req) {
+  try {
+    const { annotationId, completions } = req.body;
+
+    // Retrieve the document with the matching 'annotationId' from MongoDB
+    const existingAnnotation = await Annotation.find({ annotationId });
+
+    if (existingAnnotation.length === 0) {
+      return { success: true, message: "Annotation not found" };
+    }
+
+    // console.log({ existingAnnotation });
+    let secondaryAnn = existingAnnotation.filter((ann) =>
+      ann.taskType.includes("Review")
+    );
+    // Compare 'completions' data using string-similarity
+    if (secondaryAnn.length != 0) {
+      const similarityPercentage = calculateSimilarity(
+        secondaryAnn[0].completions,
+        completions
+      );
+
+      return { success: true, message: similarityPercentage };
+    } else {
+      return { success: true, message: "No secondary annotation found" };
+    }
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Internal Server Error", error };
+  }
+}
+
 module.exports = {
   createAnnotation,
   logAnnotation,
@@ -488,4 +545,5 @@ module.exports = {
   filterAnnotationsByPodNumber,
   groupAnnotationsByPodNumber,
   groupAnnotationsByBatch,
+  validateWithSecondary,
 };

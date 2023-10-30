@@ -33,6 +33,11 @@ router.post("/groupByBatch", async (req, res) => {
   res.status(result.success ? 200 : 401).json(result);
 });
 
+router.post("/validateWithSecondary", async (req, res) => {
+  const result = await annotationService.validateWithSecondary(req);
+  res.status(result.success ? 200 : 401).json(result);
+});
+
 // Log a new annotation with fewer data
 router.post("/logAnnotation", async (req, res) => {
   const result = await annotationService.logAnnotation(req);
