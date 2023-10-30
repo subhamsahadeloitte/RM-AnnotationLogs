@@ -1,7 +1,7 @@
 {
   "serverPort": 3000,
   "dbUrl": "mongodb+srv://adityamalik2023:Deloitte@cluster0.j1d4on4.mongodb.net/",
-  "dbName": "RM-Annotation-Logs-Testing",
+  "dbName": "RM-Annotation-Logs",
   "employeeApiUrl": "/api/employee",
   "availabilityApiUrl": "/api/availability",
   "issuesApiUrl": "/api/issues",
