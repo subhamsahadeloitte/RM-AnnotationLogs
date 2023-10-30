@@ -61,6 +61,23 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
     ```
   - Comment: Design your own **_array_of_objects_** stucture to contain completions and their corresponding questions.
 
+- **Log Annotation**
+
+  - Method: POST
+  - Endpoint: `api/annotations/logAnnotation`
+  - Request Body:
+    ```json
+    {
+      "batchNumber": "Batch 1",
+      "prompt": "rvabi",
+      "compA": "vsf",
+      "compB": "vab",
+      "compC": "bab",
+      "role": "primary",
+      "annotatorEmail": "akappatrala@deloitte.com"
+    }
+    ```
+
 - **Update Annotation**
 
   - Method: PATCH
@@ -135,6 +152,7 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
   - Comment: Set the `search` field value to null to filter only by pod and language.
 
 - #### **Group Annotations By POD Number**
+
   - Method: POST
   - Endpoint: `api/annotations/groupByPod/`
   - Request Body:
@@ -149,7 +167,9 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
     }
     ```
   - Comment: Leave all fields empty to group by _podNumber_. Leave the `language` field empty to group by _language_ for given `podNumber`. Fill both fields to group by _annotatorEmail_ for given `podNumber` and `language`.
+
 - #### **Group Annotations By Batch Number**
+
   - Method: POST
   - Endpoint: `api/annotations/groupByBatch/`
   - Request Body:
@@ -160,6 +180,39 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
     }
     ```
   - Comment: Leave all fields empty to group by _batchNumber_. Leave the `language` field empty to group by _language_ for given `batchNumber`. Fill both fields to group by _annotationId_ for given `batchNumber` and `language`.
+
+- #### **Validate With Secondary**
+  - Method: POST
+  - Endpoint: `api/annotations/validateWithSecondary/`
+  - Request Body:
+    ```json
+    {
+      "annotationId": "ANN-8RHlwM0NGH9s4DVr",
+      "completions": [
+        {
+          "completionQuestions": {
+            "Q3": "2",
+            "Q4": "1",
+            "Q5": "2"
+          }
+        },
+        {
+          "completionQuestions": {
+            "Q3": "2",
+            "Q4": "1",
+            "Q5": "1"
+          }
+        },
+        {
+          "completionQuestions": {
+            "Q3": "2",
+            "Q4": "1",
+            "Q5": "2"
+          }
+        }
+      ]
+    }
+    ```
 
 ### Response structure
 
