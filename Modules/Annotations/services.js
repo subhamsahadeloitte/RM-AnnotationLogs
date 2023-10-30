@@ -35,7 +35,8 @@ async function createAnnotation(annotationData) {
 
 async function logAnnotation(req) {
   try {
-    const { prompt, compA, compB, compC, annotatorEmail, role } = req.body;
+    const { batchNumber, prompt, compA, compB, compC, annotatorEmail, role } =
+      req.body;
     // console.log({ prompt, compA, compB, compC, annotatorEmail, role });
 
     // Check if a document with the specified 'prompt' and 'completionTexts' exists
@@ -62,6 +63,7 @@ async function logAnnotation(req) {
 
       annotationData.annotationId = annId;
       annotationData.annotatorEmail = annotatorEmail;
+      annotationData.batchNumber = batchNumber;
       annotationData.prompt = prompt;
       annotationData.completions[0].completionText = compA;
       annotationData.completions[1].completionText = compB;
