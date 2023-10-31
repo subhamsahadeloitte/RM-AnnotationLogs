@@ -479,26 +479,34 @@ async function groupAnnotationsByBatch(req) {
 
 function calculateSimilarity(completions1, completions2) {
   // Extract completion texts for Q3, Q4, Q5 from both sets
-  let score = 0,
-    total = 9;
+  let score = 9,
+    total = 9,
+    comments = [];
   completions1.map((item, idx) => {
+    const alpha = String.fromCharCode(idx + 65);
     if (
-      item.completionQuestions.Q3 === completions2[idx].completionQuestions.Q3
-    )
-      score++;
+      item.completionQuestions.Q3 != completions2[idx].completionQuestions.Q3
+    ) {
+      score--;
+      comments.push(`Q3 did not match for completion ${alpha}`);
+    }
     if (
-      item.completionQuestions.Q4 === completions2[idx].completionQuestions.Q4
-    )
-      score++;
+      item.completionQuestions.Q4 != completions2[idx].completionQuestions.Q4
+    ) {
+      score--;
+      comments.push(`Q4 did not match for completion ${alpha}`);
+    }
     if (
-      item.completionQuestions.Q5 === completions2[idx].completionQuestions.Q5
-    )
-      score++;
+      item.completionQuestions.Q5 != completions2[idx].completionQuestions.Q5
+    ) {
+      score--;
+      comments.push(`Q5 did not match for completion ${alpha}`);
+    }
   });
 
   // Calculate similarity using the string-similarity library
   const similarity = score / total;
-  return (similarity * 100).toFixed(2); // Convert to percentage
+  return { similarity: (similarity * 100).toFixed(2), comments }; // Convert to percentage
 }
 
 async function validateWithSecondary(req) {
