@@ -517,7 +517,7 @@ async function validateWithSecondary(req) {
     const existingAnnotation = await Annotation.find({ annotationId });
 
     if (existingAnnotation.length === 0) {
-      return { success: true, message: "Annotation not found" };
+      return { success: false, message: "Annotation not found" };
     }
 
     // console.log({ existingAnnotation });
@@ -533,7 +533,7 @@ async function validateWithSecondary(req) {
 
       return { success: true, message: similarityPercentage };
     } else {
-      return { success: true, message: "No secondary annotation found" };
+      return { success: false, message: "No secondary annotation found" };
     }
   } catch (error) {
     console.log(error);
