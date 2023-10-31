@@ -485,19 +485,19 @@ function calculateSimilarity(completions1, completions2) {
   completions1.map((item, idx) => {
     const alpha = String.fromCharCode(idx + 65);
     if (
-      item.completionQuestions.Q3 != completions2[idx].completionQuestions.Q3
+      item.completionQuestions.Q5 != completions2[idx].completionQuestions.Q5
     ) {
       score--;
       comments.push(`Q3 did not match for completion ${alpha}`);
     }
     if (
-      item.completionQuestions.Q4 != completions2[idx].completionQuestions.Q4
+      item.completionQuestions.Q6 != completions2[idx].completionQuestions.Q6
     ) {
       score--;
       comments.push(`Q4 did not match for completion ${alpha}`);
     }
     if (
-      item.completionQuestions.Q5 != completions2[idx].completionQuestions.Q5
+      item.completionQuestions.Q7 != completions2[idx].completionQuestions.Q7
     ) {
       score--;
       comments.push(`Q5 did not match for completion ${alpha}`);
