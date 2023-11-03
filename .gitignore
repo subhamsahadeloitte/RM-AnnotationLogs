@@ -18,3 +18,10 @@ Thumbs.db
 Scripts/
 Collections/
 Aggregations/
+
+# Ignore everything inside the folder 'Cron/SA-NSA'
+Cron/SA-NSA/*
+
+# But do not ignore the 'Cron/SA-NSA' directory itself
+!Cron/SA-NSA/
+

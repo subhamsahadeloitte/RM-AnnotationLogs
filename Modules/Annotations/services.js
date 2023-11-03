@@ -12,6 +12,7 @@ function randomString(length, chars) {
 async function createAnnotation(annotationData) {
   try {
     console.log({ annotationData });
+
     if (!annotationData["annotationId"]) {
       const annId =
         "ANN-" +
@@ -19,9 +20,31 @@ async function createAnnotation(annotationData) {
           16,
           "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         );
-      // console.log(annId);
       annotationData["annotationId"] = annId;
+    } else {
+      const foundAnnotations = await Annotation.find({
+        annotationId: annotationData["annotationId"],
+      });
+
+      let IdsToDelete = [];
+      foundAnnotations?.forEach((record) => {
+        if (
+          record.reasoning === "" &&
+          record.ranking === "" &&
+          record.rejected === false
+        ) {
+          IdsToDelete.push(record._id);
+        }
+      });
+
+      // Await the deletion operation
+      await Annotation.deleteMany({
+        _id: {
+          $in: IdsToDelete,
+        },
+      });
     }
+
     const annotation = new Annotation(annotationData);
     const response = await annotation.save();
     if (response) {
