@@ -3,6 +3,9 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const config = require("./config.json");
 const cors = require("cors");
+var cron = require("node-cron");
+
+const SA_NSA_reportService = require("./Cron/generate-SA-NSA-reports");
 
 const app = express();
 const port = config.serverPort;
@@ -30,4 +33,10 @@ app.use("/api", apiRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
+});
+
+// cron.schedule("* */2 * * *", () => {
+cron.schedule("*/15 * * * *", () => {
+  console.log("Fetching report...");
+  SA_NSA_reportService.fetchData();
 });
