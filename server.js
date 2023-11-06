@@ -36,7 +36,8 @@ app.listen(port, () => {
 });
 
 // cron.schedule("* */2 * * *", () => {
-cron.schedule("*/15 * * * *", () => {
+cron.schedule("*/2 * * * *", () => {
   console.log("Fetching report...");
-  SA_NSA_reportService.fetchData();
+  const currentDateTime = new Date();
+  SA_NSA_reportService.fetchData(currentDateTime);
 });

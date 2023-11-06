@@ -1,49 +1,51 @@
 // const fs = require("fs");
 const XLSX = require("xlsx");
-const mongoose = require("mongoose");
-const config = require("../config.json");
+// const mongoose = require("mongoose");
+// const config = require("../config.json");
 
 const Annotation = require("../Models/Annotation");
 
 // Connect to your MongoDB database
-const dbURL = config.dbUrl + config.dbName; // Replace with your actual MongoDB URL
-mongoose.connect(dbURL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// const dbURL = config.dbUrl + config.dbName; // Replace with your actual MongoDB URL
+// mongoose.connect(dbURL, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
 
 // const batch = "Batch 11";
-const currentDateTime = new Date();
-const threeHoursAgo = new Date(currentDateTime);
-threeHoursAgo.setHours(currentDateTime.getHours() - 2);
-const aggregationPipeline = [
-  {
-    $match: {
-      date: {
-        // $gte: new Date("2023-10-31T18:30:00Z"),
-        // $lte: new Date("2023-11-02T18:30:00Z"),
-        $gte: threeHoursAgo,
-        $lte: currentDateTime,
-      },
-      // batchNumber: batch,
-    },
-  },
-  {
-    $group: {
-      _id: "$annotationId",
-      taskType: { $push: "$taskType" },
-      annotatorEmail: { $push: "$annotatorEmail" },
-      language: { $push: "$language" },
-      rejected: { $push: "$rejected" },
-      batchNumber: { $push: "$batchNumber" },
-    },
-  },
-  {
-    $sort: { annotationId: 1 },
-  },
-];
+// const currentDateTime = new Date();
 
-const fetchData = async () => {
+const interval = 2;
+const fetchData = async (currentDateTime) => {
+  const hoursBefore = new Date(currentDateTime);
+  hoursBefore.setHours(currentDateTime.getHours() - interval);
+  const aggregationPipeline = [
+    {
+      $match: {
+        date: {
+          // $gte: new Date("2023-10-31T18:30:00Z"),
+          // $lte: new Date("2023-11-02T18:30:00Z"),
+          $gte: hoursBefore,
+          $lte: currentDateTime,
+        },
+        // batchNumber: batch,
+      },
+    },
+    {
+      $group: {
+        _id: "$annotationId",
+        taskType: { $push: "$taskType" },
+        annotatorEmail: { $push: "$annotatorEmail" },
+        language: { $push: "$language" },
+        rejected: { $push: "$rejected" },
+        batchNumber: { $push: "$batchNumber" },
+      },
+    },
+    {
+      $sort: { annotationId: 1 },
+    },
+  ];
+
   const response = await Annotation.aggregate(aggregationPipeline);
   // console.log(response[500]);
   console.log(response.length);
@@ -88,7 +90,7 @@ const fetchData = async () => {
   });
 
   // console.log(report[500]);
-  console.log({ threeHoursAgo, currentDateTime, count: report.length });
+  console.log({ hoursBefore, currentDateTime, count: report.length });
 
   // // Create a worksheet from the JSON data
   // const ws = XLSX.utils.json_to_sheet(report);
