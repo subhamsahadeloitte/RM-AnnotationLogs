@@ -27,6 +27,10 @@ db.once("open", () => {
   // Add module-specific initialization here
 });
 
+app.get("/", (req, res) => {
+  res.json({ message: "Server is up and running!!" });
+});
+
 // Add API routes from 'api.js'
 const apiRouter = require("./api.js");
 app.use("/api", apiRouter);
@@ -35,9 +39,10 @@ app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
 
+// CRON call
 // cron.schedule("* */2 * * *", () => {
-cron.schedule("*/2 * * * *", () => {
-  console.log("Fetching report...");
-  const currentDateTime = new Date();
-  SA_NSA_reportService.fetchData(currentDateTime);
-});
+// cron.schedule("*/15 * * * *", () => {
+//   console.log("Fetching report...");
+//   const currentDateTime = new Date();
+//   SA_NSA_reportService.fetchData(currentDateTime);
+// });
