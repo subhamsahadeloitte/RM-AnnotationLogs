@@ -57,6 +57,23 @@ async function createAnnotation(annotationData) {
   }
 }
 
+function detectNonEnglishText(text) {
+  // Regex to match non-ASCII characters
+  const nonAsciiRegex = /[^\x00-\x7F]+/;
+  // Split the text by lines and check each line
+  const lines = text.split("\n");
+  let foreignLines = [];
+  for (let line of lines) {
+    // If a line has non-ASCII characters, we consider it contains a foreign language
+    if (nonAsciiRegex.test(line)) {
+      foreignLines.push(line.trim());
+    }
+  }
+  return foreignLines.length > 0
+    ? { isForeign: true, lines: foreignLines }
+    : { isForeign: false };
+}
+
 async function logAnnotation(req) {
   try {
     const { batchNumber, prompt, compA, compB, compC, annotatorEmail, role } =
@@ -66,11 +83,12 @@ async function logAnnotation(req) {
     // Check if a document with the specified 'prompt' and 'completionTexts' exists
     const existingCompletion = await Annotation.find({
       prompt,
-      completions: {
-        $elemMatch: {
-          completionText: { $in: [compA, compB, compC] },
-        },
-      },
+      // completions: {
+      //   $elemMatch: {
+      //     completionText: { $in: [compA, compB, compC] },
+      //   },
+      // },
+      "completions.completionText": { $all: [compA, compB, compC] },
     });
     // console.log({ existingCompletion });
     if (existingCompletion.length != 0) {
@@ -93,6 +111,27 @@ async function logAnnotation(req) {
       annotationData.completions[1].completionText = compB;
       annotationData.completions[2].completionText = compC;
       console.log({ annotationData });
+
+      [compA, compB, compC].forEach(async (text, index) => {
+        const result = detectNonEnglishText(text);
+        console.log(
+          `Text ${index + 1}:`,
+          result.isForeign
+            ? "Foreign language detected"
+            : "No foreign language detected"
+        );
+        if (result.isForeign) {
+          console.log("Lines:", result.lines);
+
+          annotationData.annotatorEmail = "rejectedBySystem@deloitte.com";
+          annotationData.rejected = true;
+          annotationData.reasonForRejection =
+            "Docstring contains foreign language";
+          annotationData.taskType = "S1Review";
+
+          return;
+        }
+      });
 
       const annotation = new Annotation(annotationData);
       const response = await annotation.save();
