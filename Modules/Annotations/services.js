@@ -574,6 +574,12 @@ function calculateSimilarity(completions1, completions2) {
       score--;
       comments.push(`Q5 did not match for completion ${alpha}`);
     }
+    if (
+      item.completionQuestions.Q7 != completions2[idx].completionQuestions.Q7
+    ) {
+      score--;
+      comments.push(`Rating did not match for completion ${alpha}`);
+    }
   });
 
   // Calculate similarity using the string-similarity library
