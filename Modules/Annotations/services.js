@@ -77,7 +77,6 @@ async function logAnnotation(req) {
   try {
     const { batchNumber, prompt, compA, compB, compC, annotatorEmail, role } =
       req.body;
-    // console.log({ prompt, compA, compB, compC, annotatorEmail, role });
 
     // Check if a document with the specified 'prompt' and 'completionTexts' exists
     const existingCompletion = await Annotation.find({
@@ -109,28 +108,40 @@ async function logAnnotation(req) {
       annotationData.completions[0].completionText = compA;
       annotationData.completions[1].completionText = compB;
       annotationData.completions[2].completionText = compC;
-      console.log({ annotationData });
+      annotationData.rejected = false;
+      annotationData.reasonForRejection = "";
+      annotationData.taskType = "fresh";
+      // console.log({ annotationData });
+
+      const rejectLog = () => {
+        annotationData.annotatorEmail = "rejectedBySystem@deloitte.com";
+        annotationData.rejected = true;
+        annotationData.reasonForRejection =
+          "Docstring contains foreign language";
+        annotationData.taskType = "S1Review";
+      };
 
       [compA, compB, compC].forEach(async (text, index) => {
         const result = detectNonEnglishText(text);
-        console.log(
-          `Text ${index + 1}:`,
-          result.isForeign
-            ? "Foreign language detected"
-            : "No foreign language detected"
-        );
+        // console.log(
+        //   `Text ${index + 1}:`,
+        //   result.isForeign
+        //     ? "Foreign language detected in one completion"
+        //     : "No foreign language detected for this completion"
+        // );
         if (result.isForeign) {
           console.log("Lines:", result.lines);
-
-          annotationData.annotatorEmail = "rejectedBySystem@deloitte.com";
-          annotationData.rejected = true;
-          annotationData.reasonForRejection =
-            "Docstring contains foreign language";
-          annotationData.taskType = "S1Review";
+          rejectLog();
 
           return;
         }
       });
+
+      const promptCheck = detectNonEnglishText(prompt);
+      if (promptCheck.isForeign === true) {
+        console.log("Lines:", promptCheck.lines);
+        rejectLog();
+      }
 
       const annotation = new Annotation(annotationData);
       const response = await annotation.save();
