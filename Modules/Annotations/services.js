@@ -81,7 +81,7 @@ async function logAnnotation(req) {
     // Check if a document with the specified 'prompt' and 'completionTexts' exists
     const existingCompletion = await Annotation.find({
       prompt,
-      batchNumber,
+      // batchNumber,
       "completions.completionText": { $all: [compA, compB, compC] },
     });
     // console.log({ existingCompletion });
