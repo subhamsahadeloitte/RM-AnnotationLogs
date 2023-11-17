@@ -44,6 +44,11 @@ router.post("/logAnnotation", async (req, res) => {
   res.status(result.success ? 200 : 401).json(result);
 });
 
+router.post("/searchWithKeyword", async (req, res) => {
+  const result = await annotationService.searchWithKeyword(req);
+  res.status(result.success ? 200 : 401).json(result);
+});
+
 // Create a new annotation
 router.post("/", async (req, res) => {
   const result = await annotationService.createAnnotation(req.body);

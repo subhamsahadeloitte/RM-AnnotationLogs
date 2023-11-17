@@ -609,6 +609,19 @@ async function validateWithSecondary(req) {
   }
 }
 
+async function searchWithKeyword(req) {
+  try {
+    const { keywords } = req.body;
+
+    // Use MongoDB's $in operator to find documents containing any of the specified keywords
+    const result = await Annotation.find({ keywords: { $in: keywords } });
+    return { success: true, message: result, totalCount: result.length };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Internal Server Error", error };
+  }
+}
+
 module.exports = {
   createAnnotation,
   logAnnotation,
@@ -622,4 +635,5 @@ module.exports = {
   groupAnnotationsByPodNumber,
   groupAnnotationsByBatch,
   validateWithSecondary,
+  searchWithKeyword,
 };
