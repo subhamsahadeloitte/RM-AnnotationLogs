@@ -30,7 +30,11 @@ const runCheckLogSchema = new mongoose.Schema({
     enum: ["fresh", "re-work", "S1Review", "S2Review"],
     // required: true,
   },
-  errors: {
+  errorsArr: {
+    type: Array, // Assuming completions are stored as an array of strings,
+    required: true,
+  },
+  warningsArr: {
     type: Array, // Assuming completions are stored as an array of strings,
     required: true,
   },
