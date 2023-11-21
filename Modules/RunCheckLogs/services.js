@@ -9,7 +9,8 @@ async function createLog(req) {
       batchNumber,
       language,
       taskType,
-      errors,
+      errorsArr,
+      warningsArr,
     } = req;
 
     const annotation = new RunCheckLog({
@@ -18,7 +19,8 @@ async function createLog(req) {
       batchNumber,
       language,
       taskType,
-      errors,
+      errorsArr,
+      warningsArr,
     });
     const response = await annotation.save();
     if (response) {

@@ -242,7 +242,8 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
       "batchNumber": "Batch 4",
       "language": "Python",
       "taskType": "S1Review",
-      "errors": Array
+      "errorsArr": Array,
+      "warningsArr": Array,
     }
     ```
 
