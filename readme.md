@@ -213,6 +213,38 @@ RM-Annotation-Logs is a Node.js backend project designed to manage employee data
       ]
     }
     ```
+- #### **Search With Keyword**
+
+  - Method: POST
+  - Endpoint: `api/annotations/searchWithKeyword/`
+  - Request Body:
+    ```json
+    {
+      "keywords": [
+        "java.util.Arrays",
+        "org.bukkit.Bukkit",
+        "com.github.sanctum.labyrinth.library.StringUtils"
+      ]
+    }
+    ```
+
+### RunCheckLogs API
+
+- #### **Create Log**
+
+  - Method: POST
+  - Endpoint: `api/runCheckLogs/`
+  - Request Body:
+    ```json
+    {
+      "annotationId": "ANN-uZkvgNJs36SJb2Xf",
+      "annotatorEmail": "abhishekkh@deloitte.com",
+      "batchNumber": "Batch 4",
+      "language": "Python",
+      "taskType": "S1Review",
+      "errors": Array
+    }
+    ```
 
 ### Response structure
 
